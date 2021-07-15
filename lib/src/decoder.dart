@@ -1,5 +1,25 @@
 part of bencode;
 
+/// This class parses bytes and builds the corresponding object.
+///
+/// The input must be Bencoding of a single object which can be a list, map, int
+/// or string.
+///
+/// When used as a [StreamTransformer], the input stream may emit
+/// multiple byte arrays. The concatenation of all of these bytes must
+/// be a valid Bencoding of an object.
+class BDecoder extends Converter<List<int>, Object?> {
+  /// Creates a [BDecoder] instance.
+  const BDecoder();
+
+  /// Converts the given bytes array [input] to its corresponding object.
+  ///
+  /// Parsed objects are of the types [int], [String], [List]s of parsed Objects
+  /// or [Map]s from [String] to parsed objects.
+  @override
+  Object? convert(List<int> input) => _parseValue(input, _Indexer());
+}
+
 const _end = 101;
 const _num_start = 105;
 const _list_start = 108;
@@ -9,13 +29,6 @@ const _str_len_end = 58;
 const _int_negative = 45;
 const _int_positive = 43;
 const _double_period = 46;
-
-class BDecoder extends Converter<List<int>, Object?> {
-  const BDecoder();
-
-  @override
-  Object? convert(List<int> input) => _parseValue(input, _Indexer());
-}
 
 class _Indexer {
   var val = 0;

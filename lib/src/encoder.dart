@@ -1,8 +1,24 @@
 part of bencode;
 
+/// This class converts Dart objects to bytes.
 class BEncoder extends Converter<Object?, List<int>> {
+  /// Creates a [BCodec] instance.
   const BEncoder();
 
+  /// Converts [Object?] to a JSON [List<int>].
+  ///
+  /// Directly serializable values are [int], [String]. [List], and [Map] can
+  /// also be serialized. For [List], the elements must all be serializable.
+  /// For [Map], the keys must be [String] and the values must be serializable.
+  ///
+  /// Example:
+  /// ```dart
+  /// final encoder = BEncoder();
+  /// final result = encoder.encode(["foo", {"bar": 499}])
+  ///
+  /// /// To Visualize generated output.e
+  /// print(String.fromCharCodes(result)); /// will yiled `l3:food3:bari499eee`
+  /// ```
   @override
   List<int> convert(Object? input) {
     final result = <int>[];
